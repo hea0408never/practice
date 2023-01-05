@@ -37,8 +37,14 @@ public class QuestionController {
                                                      @Positive @RequestParam(value = "page", defaultValue = "1") int page,
                                                      @Positive @RequestParam(value = "size", defaultValue = "5") int size,
                                                      @RequestParam(value = "sort", defaultValue = "createdAt") String sort){
-        QuestionAndAnswerDto questionAndAnswerDto = questionService.questionAndAnswerDto(id,page-1,size,sort);
-        return ResponseEntity.ok(questionAndAnswerDto);
+        return ResponseEntity.ok(questionService.questionAndAnswerDto(id,page-1,size,sort));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<?> list(@Positive @RequestParam(value = "page", defaultValue = "1") int page,
+                                  @Positive @RequestParam(value = "size", defaultValue = "5") int size,
+                                  @RequestParam(value = "sort", defaultValue = "createdAt") String sort){
+        return ResponseEntity.ok(questionService.listQuestion(page-1,size,sort));
     }
 
     @PatchMapping("/update")

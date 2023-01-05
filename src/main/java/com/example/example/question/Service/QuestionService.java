@@ -6,13 +6,13 @@ import com.example.example.exception.BusinessLogicException;
 import com.example.example.exception.ExceptionCode;
 import com.example.example.question.Dto.CreateQuestionDto;
 import com.example.example.question.Dto.QuestionAndAnswerDto;
+import com.example.example.question.Dto.ResponseQuestionDto;
 import com.example.example.question.Dto.UpdateQuestionDto;
 import com.example.example.question.Entity.Question;
+import com.example.example.question.Mapper.QuestionMapper;
 import com.example.example.question.Repository.QuestionRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,14 +21,17 @@ import java.util.List;
 
 @Service
 @Transactional
+@Slf4j
 public class QuestionService {
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
+    private final QuestionMapper questionMapper;
 
     public QuestionService(QuestionRepository questionRepository,
-                           AnswerRepository answerRepository){
+                           AnswerRepository answerRepository, QuestionMapper questionMapper){
         this.questionRepository = questionRepository;
         this.answerRepository = answerRepository;
+        this.questionMapper = questionMapper;
     }
 
     public Question createQuestion(CreateQuestionDto dto) {
@@ -71,5 +74,17 @@ public class QuestionService {
         questionAndAnswerDto.setCreatedAt(question.getCreatedAt());
         questionAndAnswerDto.setAnswers(cardPage);
         return questionAndAnswerDto;
+    }
+
+    public Page<ResponseQuestionDto> listQuestion(int page, int size, String sort) {
+        List<Question> questions = questionRepository.findAll();
+        List<ResponseQuestionDto> questionDtoList = new ArrayList<>();
+        for (Question question : questions){
+            questionDtoList.add(questionMapper.questionToResponseDto(question));
+        }
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(sort).descending());
+        int start = (int)pageRequest.getOffset();
+        int end = Math.min((start+pageRequest.getPageSize()),questionDtoList.size());
+        return new PageImpl<>(questionDtoList.subList(start,end),pageRequest,questionDtoList.size());
     }
 }
