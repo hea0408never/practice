@@ -1,18 +1,17 @@
-package com.example.example.crud;
+package com.example.example.answer.Dto;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 
 @Getter
-@Setter
-public class CreateDto {
+public class CreateAnswerDto {
 
-    @NotBlank
-    private String title;
     @NotBlank
     private String content;
     @NotBlank
     private String nickname;
+    @Positive
+    private Long questionId;
 }

@@ -1,17 +1,14 @@
-package com.example.example.crud;
+package com.example.example.answer.Dto;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@NoArgsConstructor
-public class ResponseDto {
+public class ResponseAnswerDto {
 
-    private String title;
     private String content;
     private String nickname;
     private LocalDateTime createdAt;

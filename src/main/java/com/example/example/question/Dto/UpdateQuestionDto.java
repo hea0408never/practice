@@ -1,13 +1,11 @@
-package com.example.example.crud;
+package com.example.example.question.Dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
-public class UpdateDto {
+public class UpdateQuestionDto {
 
     private Long id;
     private String title;
