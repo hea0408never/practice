@@ -24,6 +24,10 @@ public class AnswerService {
         Answer answer = new Answer();
         answer.createAnswer(dto.getContent(), dto.getNickname());
         answer.setQuestion(questionService.findQuestion(dto.getQuestionId()));
+        if (dto.getParentId() != null) {
+            answer.setParent(findAnswer(dto.getParentId()));
+        }
+
         return answerRepository.save(answer);
     }
 

@@ -52,7 +52,6 @@ public class QuestionService {
 
     public void deleteQuestion(long id) {
         Question question = findQuestion(id);
-        answerRepository.deleteAllByQuestionId(id);
         questionRepository.delete(question);
     }
 

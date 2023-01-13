@@ -1,14 +1,18 @@
 package com.example.example.answer.Entity;
 
+import com.example.example.global.BaseTime;
 import com.example.example.question.Entity.Question;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
-public class Answer {
+@NoArgsConstructor
+public class Answer extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,12 +24,16 @@ public class Answer {
     @Column
     private String nickname;
 
-    @Column
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id")
     private Question question;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Answer parent;
+
+    @OneToMany(mappedBy = "parent", orphanRemoval = true)
+    private List<Answer> children = new ArrayList<>();
 
     public void createAnswer(String content, String nickname){
         this.content = content;
@@ -43,5 +51,13 @@ public class Answer {
         }
         this.question = question;
         question.getAnswers().add(this);
+    }
+
+    public void setParent(Answer parent){
+        if(this.parent != null){
+            this.parent.getChildren().remove(this);
+        }
+        this.parent = parent;
+        parent.getChildren().add(this);
     }
 }

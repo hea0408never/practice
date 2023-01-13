@@ -1,6 +1,8 @@
 package com.example.example.question.Entity;
 
 import com.example.example.answer.Entity.Answer;
+import com.example.example.global.BaseTime;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +14,7 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor
-public class Question {
+public class Question extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +29,7 @@ public class Question {
     @Column
     private String nickname;
 
-    @Column
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", orphanRemoval = true)
     private List<Answer> answers = new ArrayList<>();
 
     public void createQuestion(String title, String content, String nickname){

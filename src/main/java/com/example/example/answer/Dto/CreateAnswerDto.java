@@ -14,4 +14,6 @@ public class CreateAnswerDto {
     private String nickname;
     @Positive
     private Long questionId;
+    @Positive
+    private Long parentId;
 }
